@@ -8,3 +8,4 @@
 
 from .rtmv import *
 from .nerf_standard import *
+from .nerf_multi import *
