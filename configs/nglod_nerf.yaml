@@ -22,7 +22,7 @@ dataset:
     dataset_type: 'multiview'
     multiview_dataset_format: 'rtmv'
     num_rays_sampled_per_img: 4096
-    mip: 2
+    mip: 0
     bg_color: 'white'
 
 renderer:
@@ -40,10 +40,10 @@ renderer:
 
 trainer:
     trainer_type: 'MultiviewTrainer'
-    epochs: 50
+    epochs: 250
     batch_size: 1
     model_format: 'full'
-    valid_every: 50
+    valid_every: 250
     save_every: 10
     render_every: 10
 

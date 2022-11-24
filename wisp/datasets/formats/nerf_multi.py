@@ -110,7 +110,7 @@ def load_nerf_standard_data(root, split='train', bg_color='white', num_workers=-
         mip = 0
 
     if len(transforms) == 1:
-        transform_dict['train'] = transforms[0]
+        transform_dict[split] = transforms[0]
         train_only = True
     elif len(transforms) == 3:
         fnames = [os.path.basename(transform) for transform in transforms]
@@ -123,7 +123,7 @@ def load_nerf_standard_data(root, split='train', bg_color='white', num_workers=-
     else:
         raise RuntimeError("Unsupported number of splits, there should be ['test', 'train', 'val']")
 
-    if split not in transform_dict:
+    if split not in transform_dict and not train_only:
         raise RuntimeError(f"Split type ['{split}'] unsupported in the dataset provided")
 
     for key in transform_dict:
@@ -243,14 +243,14 @@ def load_nerf_standard_data(root, split='train', bg_color='white', num_workers=-
         view_matrix[:3, -1] = torch.matmul(-view_matrix[:3, :3], poses[i][:3, -1])
         view_matrix[3, 3] = 1.0
         camera = Camera.from_args(view_matrix=view_matrix,
-                                  focal_x=fx,
-                                  focal_y=fy,
+                                  focal_x=fx[i],
+                                  focal_y=fy[i],
                                   width=w,
                                   height=h,
                                   far=default_far,
                                   near=0.0,
-                                  x0=x0,
-                                  y0=y0,
+                                  x0=x0[i],
+                                  y0=y0[i],
                                   dtype=torch.float64)
         camera.change_coordinate_system(blender_coords())
         cameras[basenames[i]] = camera
